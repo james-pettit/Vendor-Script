@@ -38,15 +38,21 @@ logging.basicConfig(filename="X:\Engineering\Project Folders\Project 647 - Vendo
 
 try:
     os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress QTD list.txt")
+    os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress CUT list.txt")
+    os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress NOCUT list.txt")
     
 except:
-    print("Couldn't delete QTD list")
+    print("Couldn't delete a temporary list")
 
 try:
     qtdfile = open("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress QTD list.txt", 'a')
+    cutfile = open("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress CUT list.txt", 'a')
+    nocutfile = open("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress NOCUT list.txt", 'a')
 
 except:
-    print("Couldn't open new QTD list")
+    print("Couldn't open new list")
+
+
 #------------------------------------------------convert_pdf_to_txt------------------------------------------------------
 
 #Converts the entire pdf to a string of text, and returns this text. Needs to be passed a full path
@@ -81,19 +87,18 @@ def find_filename(filepath):
     logging.debug('find_filename called with:\n' + filepath + '\n')
 
     if re.search("\d\d\d\d\d\d [RrXx]-\d\d\.",filepath) is not None:
-#       comment out these lines to stop examination of each pdf and trust the name
-#        try:
-#            pdftext = convert_pdf_to_txt(filepath)
-#            if re.search("QTD", pdftext) is not None:
-#                print("yes")
-#                qtdfile.write(filepath + "\n")
-#        except:
-#            pass
+
         try:
             pdftext = convert_pdf_to_txt(filepath)
             if re.search("QTD", pdftext) is not None:
-                print("yes")
+                print("QTD")
                 qtdfile.write(filepath + "\n")
+            if re.search("dxf FOR CUT FILE", pdftext) is not None:
+                print("CUT")
+                cutfile.write(filepath + "\n")
+            if re.search("THIS PART DOES NOT USE A CUT FILE", pdftext) is not None:
+                print("NOCUT")
+                nocutfile.write(filepath + "\n")
         except:
             pass
            
@@ -301,14 +306,20 @@ logging.debug('First pass finished\n\n')
 #rev_list is complete and ordered at this point
 
 qtdfile.close()
+cutfile.close()
+nocutfile.close()
 
 try:
     os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\QTD list.txt")
+    os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\CUT list.txt")
+    os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\NOCUT list.txt")
     
 except:
-    print("Couldn't delete QTD list")
+    print("Couldn't delete a list")
 
 os.rename("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress QTD list.txt","X:\Engineering\Project Folders\Project 647 - Vendor Files Script\QTD list.txt")
+os.rename("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress CUT list.txt","X:\Engineering\Project Folders\Project 647 - Vendor Files Script\CUT list.txt")
+os.rename("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress NOCUT list.txt","X:\Engineering\Project Folders\Project 647 - Vendor Files Script\NOCUT list.txt")
 
 file_list = list_files(directory_path)
 
