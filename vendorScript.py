@@ -37,16 +37,10 @@ riffraff_path = os.path.normpath("X:\Engineering\Archive")
 logging.basicConfig(filename="X:\Engineering\Project Folders\Project 647 - Vendor Files Script\logs\log %s.txt"% time.strftime("%d-%b-%y %H%M"), level=logging.INFO)
 
 try:
-    os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\QTD list.txt")
-    
-except:
-    print("Couldn't delete QTD list")
-
-try:
-    qtdfile = open("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\QTD list.txt", 'a')
+    qtdfile = open("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In progress QTD list.txt", 'a')
 
 except:
-    print("Couldn't open QTD list")
+    print("Couldn't open new QTD list")
 #------------------------------------------------convert_pdf_to_txt------------------------------------------------------
 
 #Converts the entire pdf to a string of text, and returns this text. Needs to be passed a full path
@@ -301,6 +295,14 @@ logging.debug('First pass finished\n\n')
 #rev_list is complete and ordered at this point
 
 qtdfile.close()
+
+try:
+    os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\QTD list.txt")
+    
+except:
+    print("Couldn't delete QTD list")
+
+os.rename("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress QTD list.txt","X:\Engineering\Project Folders\Project 647 - Vendor Files Script\QTD list.txt")
 
 file_list = list_files(directory_path)
 
