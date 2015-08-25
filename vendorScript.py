@@ -37,7 +37,13 @@ riffraff_path = os.path.normpath("X:\Engineering\Archive")
 logging.basicConfig(filename="X:\Engineering\Project Folders\Project 647 - Vendor Files Script\logs\log %s.txt"% time.strftime("%d-%b-%y %H%M"), level=logging.INFO)
 
 try:
-    qtdfile = open("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In progress QTD list.txt", 'a')
+    os.remove("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress QTD list.txt")
+    
+except:
+    print("Couldn't delete QTD list")
+
+try:
+    qtdfile = open("X:\Engineering\Project Folders\Project 647 - Vendor Files Script\In Progress QTD list.txt", 'a')
 
 except:
     print("Couldn't open new QTD list")
