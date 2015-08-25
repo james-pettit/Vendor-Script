@@ -92,13 +92,13 @@ def find_filename(filepath):
             pdftext = convert_pdf_to_txt(filepath)
             if re.search("QTD", pdftext) is not None:
                 print("QTD")
-                qtdfile.write(filepath + "\n")
+                qtdfile.write(filepath[28:-9] + "\n")
             if re.search("dxf FOR CUT FILE", pdftext) is not None:
                 print("CUT")
-                cutfile.write(filepath + "\n")
+                cutfile.write(filepath[28:-9] + "\n")
             if re.search("THIS PART DOES NOT USE A CUT FILE", pdftext) is not None:
                 print("NOCUT")
-                nocutfile.write(filepath + "\n")
+                nocutfile.write(filepath[28:-9] + "\n")
         except:
             pass
            
