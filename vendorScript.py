@@ -14,7 +14,7 @@ import logging
 
 #defines the sort order for idenfitying precidence of revisions used to order
 #revisions in rev_list when find_filename is called on a PDF
-sort_alphabet = '-RrXx9876543210'
+sort_alphabet = "-RrXx9876543210"
 
 #starts the files processed count at zero
 files_processed = 0
@@ -68,13 +68,13 @@ except:
 #passed a full path
 
 def convert_pdf_to_txt(path):
-    logging.debug('convert_pdf_to_txt called with:\n' + path + '\n')
+    logging.debug("convert_pdf_to_txt called with:\n" + path + "\n")
     rsrcmgr = PDFResourceManager()
     retstr = StringIO()
-    codec = 'utf-8'
+    codec = "utf-8"
     laparams = LAParams()
     device = TextConverter(rsrcmgr, retstr, codec=codec, laparams=laparams)
-    fp = open(path, 'rb')
+    fp = open(path, "rb")
     interpreter = PDFPageInterpreter(rsrcmgr, device)
     maxpages = 0
     caching = True
@@ -86,7 +86,7 @@ def convert_pdf_to_txt(path):
     device.close()
     str = retstr.getvalue()
     retstr.close()
-    logging.debug('convert_pdf_to_txt returns the text of the PDF\n\n')
+    logging.debug("convert_pdf_to_txt returns the text of the PDF\n\n")
     return str
 
 #--------------------------------find_filename----------------------------------
@@ -95,7 +95,7 @@ def convert_pdf_to_txt(path):
 
 def find_filename(filepath):
 
-    logging.debug('find_filename called with:\n' + filepath + '\n')
+    logging.debug("find_filename called with:\n" + filepath + "\n")
 
     if re.search("\d\d\d\d\d\d [RrXx]-\d\d\.",filepath) is not None:
 
@@ -122,10 +122,10 @@ def find_filename(filepath):
                 key = lambda word: [sort_alphabet.index(c) for c in word])
         return os.path.basename(filepath)
 
-    if file_to_open.lower().endswith('.pdf'):
+    if file_to_open.lower().endswith(".pdf"):
         pass
     else:
-        logging.debug('main module: \n' + filepath + ' isn\'t a PDF \n\n')
+        logging.debug("main module: \n" + filepath + " isn\'t a PDF \n\n")
         return os.path.basename(filepath)
 
     try:
@@ -139,13 +139,13 @@ def find_filename(filepath):
                 rev_list[filenumber] = sorted(rev_list[filenumber],
                 key = lambda word: [sort_alphabet.index(c) for c in word])
     except:
-        logging.debug('Could not find a 6 digit number in filename. Return:\n' +
-         os.path.basename(filepath) + '\n\n')
+        logging.debug("Could not find a 6 digit number in filename. Return:\n" +
+         os.path.basename(filepath) + "\n\n")
         return os.path.basename(filepath)
 
     if rev != None:
-        new_filename = filenumber + ' ' + rev + '.PDF'
-        logging.debug('find_filename returns:\n' + new_filename + '\n\n')
+        new_filename = filenumber + " " + rev + ".PDF"
+        logging.debug("find_filename returns:\n" + new_filename + "\n\n")
         return new_filename
     else:
         return os.path.basename(filepath)
@@ -156,13 +156,13 @@ def find_filename(filepath):
 
 def non_pdf_find_filename(filepath):
 
-    logging.debug('non_pdf_find_filename called with:\n' + filepath + '\n')
+    logging.debug("non_pdf_find_filename called with:\n" + filepath + "\n")
 
     try:
         filenumber = re.search("\d\d\d\d\d\d",filepath).group()
         rev = non_pdf_find_rev(filepath, filenumber)
     except:
-        logging.debug('Could not find a 6 digit number in filename. Return:\n' +
+        logging.debug("Could not find a 6 digit number in filename. Return:\n" +
         os.path.basename(filepath) + '\n\n')
         return os.path.basename(filepath)
 
@@ -184,7 +184,7 @@ def non_pdf_find_rev(filepath, filenumber):
     top = os.path.getmtime(filepath) + association_window
 
     for revision in rev_list[filenumber]:
-        pdf_path = os.path.join(directory_path, filenumber+' '+revision+'.pdf')
+        pdf_path = os.path.join(directory_path, filenumber+" "+revision+".pdf")
         pdf_time = os.path.getmtime(pdf_path)
         if (bottom < pdf_time and pdf_time < top):
             return revision
@@ -198,12 +198,12 @@ def non_pdf_find_rev(filepath, filenumber):
 #in ".pdf"
 
 def find_rev_pdf(filepath):
-    logging.debug('find_rev_pdf called with:\n' + filepath + '\n')
+    logging.debug("find_rev_pdf called with:\n" + filepath + "\n")
     if filepath[-4:].lower() == ".pdf":
         try:
             pdftext = convert_pdf_to_txt(filepath)
             revinfo = re.search("REV #\n(\S*\d)",pdftext)
-            logging.debug('find_rev_pdf returns:\n'+ revinfo.group(1) + '\n\n')
+            logging.debug("find_rev_pdf returns:\n"+ revinfo.group(1) + "\n\n")
             revision_on_dwg = revinfo.group(1)
 
             if re.search("^\d$",revision_on_dwg) is not None:
@@ -211,11 +211,11 @@ def find_rev_pdf(filepath):
             else:
                 return revision_on_dwg
         except:
-            logging.debug('find_rev_pdf returns:\n'+ filepath + '\n File"
-            " didn\'t match regex\n\n')
+            logging.debug("find_rev_pdf returns:\n"+ filepath + "\n File"
+            " didn\'t match regex\n\n")
             return
     else:
-        logging.debug('find_rev_pdf was called on a file that is not a PDF.\n')
+        logging.debug("find_rev_pdf was called on a file that is not a PDF.\n")
         return
 
 #--------------------------------list_files-------------------------------------
@@ -224,13 +224,13 @@ def find_rev_pdf(filepath):
 #subfolders except other. Returns full paths to each file
 
 def list_files(directory_path):
-    logging.debug('list_files called with:\n' + directory_path + '\n')
+    logging.debug("list_files called with:\n" + directory_path + "\n")
     filenames_list = []
     for dirpath, dirnames, filenames in os.walk(directory_path):
         if riffraff_path in dirpath:
             dirpath.remove(riffraff_path)
         filenames_list.extend(os.path.join(dirpath,x) for x in filenames)
-    logging.debug('list_files returns file list\n\n')
+    logging.debug("list_files returns file list\n\n")
     return filenames_list
 
 #--------------------------------gracefulRename---------------------------------
@@ -242,35 +242,35 @@ def list_files(directory_path):
 #doesn't collide. Depends on extension being 4 characters (including period)
 
 def gracefulRename(original_filepath, new_filepath):
-    logging.debug('gracefulRename called with:\n' + original_filepath +
-    '\n' + new_filepath + '\n')
+    logging.debug("gracefulRename called with:\n" + original_filepath +
+    "\n" + new_filepath + "\n")
     if original_filepath.lower() == new_filepath.lower():
-        logging.debug('gracefulRename attempted to rename a file to the same"
-        " name. No change was made\n\n')
+        logging.debug("gracefulRename attempted to rename a file to the same"
+        " name. No change was made\n\n")
         return
     if os.path.exists(new_filepath):
-        logging.debug('gracefulRename is attempting to rename a file to a path"
-        " that already exists\n')
+        logging.debug("gracefulRename is attempting to rename a file to a path"
+        " that already exists\n")
         if hashfile(original_filepath) == hashfile(new_filepath):
             os.remove(original_filepath)
-            logging.info('gracefulRename returns: ' +
-            os.path.basename(original_filepath) + ' and ' +
-            os.path.basename(new_filepath) + ' were identical, removed ' +
-            original_filepath +'\n\n')
+            logging.info("gracefulRename returns: " +
+            os.path.basename(original_filepath) + " and " +
+            os.path.basename(new_filepath) + " were identical, removed " +
+            original_filepath +"\n\n")
             return
         else:
             attempts = 1
             while True:
                 modified_new_filepath = new_filepath[:-4] +
-                ' (%i)' % attempts + new_filepath[-4:]
+                " (%i)" % attempts + new_filepath[-4:]
                 if os.path.exists(modified_new_filepath):
                     attempts += 1
                 else:
                     try:
                         os.rename(original_filepath, modified_new_filepath)
-                        logging.info('gracefulRename returns: \n' +
-                        original_filepath + '\n renamed to \n' +
-                        modified_new_filepath + '\n\n')
+                        logging.info("gracefulRename returns: \n" +
+                        original_filepath + "\n renamed to \n" +
+                        modified_new_filepath + "\n\n")
                         return
                     except:
                         return
@@ -278,9 +278,9 @@ def gracefulRename(original_filepath, new_filepath):
     else:
         try:
             os.rename(original_filepath, new_filepath)
-            logging.info(' gracefulRename changed ' +
-            os.path.basename(original_filepath) + ' to ' +
-            os.path.basename(new_filepath) + ' successfully\n\n')
+            logging.info(" gracefulRename changed " +
+            os.path.basename(original_filepath) + " to " +
+            os.path.basename(new_filepath) + " successfully\n\n")
         except:
             return
 
@@ -290,15 +290,15 @@ def gracefulRename(original_filepath, new_filepath):
 
 def hashfile(filepath):
     try:
-        logging.debug('hashfile called with: \n' + filepath + '\n')
-        afile = open(filepath, 'rb')
+        logging.debug("hashfile called with: \n" + filepath + "\n")
+        afile = open(filepath, "rb")
         hasher = hashlib.md5()
         buf = afile.read(65536)
         while len(buf) > 0:
             hasher.update(buf)
             buf = afile.read(65536)
         afile.close()
-        logging.debug('hashfile returns: ' + hasher.hexdigest() + '\n\n')
+        logging.debug("hashfile returns: " + hasher.hexdigest() + "\n\n")
         return hasher.hexdigest()
     except:
         return 1
@@ -316,8 +316,8 @@ for file_to_open in file_list:
     files_processed += 1
     print files_processed
     #log the interaction with the file under this heading
-    logging.debug('\n-------------------First Pass ' +
-    os.path.basename(file_to_open) + '-------------------\n\n')
+    logging.debug("\n-------------------First Pass " +
+    os.path.basename(file_to_open) + "-------------------\n\n")
 
     if re.search("(\d\d\d\d\d\d [RrXx]-\d\d\.|\d\d\d\d\d\d\.|\d\d\d\d\d\d "
     "[RrXx]\d+.|\d\d\d\d\d\d \d+\.|\d\d\d\d\d\d +\.|\d\d\d\d\d\d "
@@ -330,8 +330,8 @@ for file_to_open in file_list:
 
     else:
         #file doesn't have the correct name format. needs to be moved
-        logging.info('main module: \n' + file_to_open +
-        ' doesn\'t match the name format, moved to archive \n\n')
+        logging.info("main module: \n" + file_to_open +
+        " doesn\'t match the name format, moved to archive \n\n")
         gracefulRename(file_to_open, os.path.join(archive_path,
         os.path.basename(file_to_open)))
 
@@ -372,8 +372,8 @@ for file_to_open in file_list:
     files_processed += 1
     print files_processed
 
-    logging.debug('\n-------------------Second Pass ' +
-    os.path.basename(file_to_open) + '-------------------\n\n')
+    logging.debug("\n-------------------Second Pass " +
+    os.path.basename(file_to_open) + "-------------------\n\n")
 
     new_filepath = os.path.join(directory_path,
     non_pdf_find_filename(file_to_open))
@@ -397,7 +397,7 @@ for file_to_open in file_list:
                 os.path.join(archive_path, number + ' ' + rev + extension))
 
     else:
-        logging.info('main module: \n' + new_filepath +
-        ' couldn\'t be assigned a revision, moved to archive \n\n')
+        logging.info("main module: \n" + new_filepath +
+        " couldn\'t be assigned a revision, moved to archive \n\n")
         gracefulRename(new_filepath,
         os.path.join(archive_path, non_pdf_find_filename(new_filepath)))
