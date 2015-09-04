@@ -261,7 +261,7 @@ def gracefulRename(original_filepath, new_filepath):
         else:
             attempts = 1
             while True:
-                modified_new_filepath = new_filepath[:-4] +
+                modified_new_filepath = new_filepath[:-4] +\
                 " (%i)" % attempts + new_filepath[-4:]
                 if os.path.exists(modified_new_filepath):
                     attempts += 1
