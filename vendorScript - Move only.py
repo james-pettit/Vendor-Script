@@ -274,8 +274,6 @@ logging.debug('First pass finished\n\n')
 
 #rev_list is complete and ordered at this point
 
-qtdfile.close()
-
 file_list = list_files(directory_path)
 
 for file_to_open in file_list:
